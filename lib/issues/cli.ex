@@ -46,8 +46,9 @@ defmodule Issues.CLI do
   def process({user, project, count}) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response()
-    |> sort_into_descending_order()\
+    |> sort_into_descending_order()
 	|> last(count)
+    |> Issues.TableFormatter.print_table_for_columns(["number", "created_at", "title"])
   end
   
   def sort_into_descending_order(list_of_issues) do
@@ -63,11 +64,9 @@ defmodule Issues.CLI do
     System.halt(2)
   end
   
-  def last(list, count) doc
+  def last(list, count) do
     list
 	|> Enum.take(count)
-	|> Enum.revers
+	|> Enum.reverse()
   end
-  
-
 end
